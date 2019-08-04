@@ -4,44 +4,40 @@
 #include <Bounce2.h>
 
 // ***DIO Pins***
-#define RedUpperKeySwitchSwitch_up 0
-#define RedUpperKeySwitchSwitch_down 1
-#define RedUpperElevatorEnable_A 2
-#define RedUpperElevatorEnable_B 3
-#define RedUpperMoveUp 4
-#define RedUpperMoveDown 5
-#define RedUpperTopLimit 6
-#define RedUpperBottomLimit 7
+#define RedUpperKey 0
+#define RedUpperElevatorEnable_A 1
+#define RedUpperElevatorEnable_B 2
+#define RedUpperMoveUp 3
+#define RedUpperMoveDown 4
+#define RedUpperTopLimit 5
+#define RedUpperBottomLimit 6
 
-#define RedLowerKeySwitchSwitch_up 8
-#define RedLowerKeySwitchSwitch_down 9
-#define RedLowerElevatorEnable_A 10
-#define RedLowerElevatorEnable_B 11
-#define RedLowerMoveUp 12
-#define RedLowerMoveDown 13
-#define RedLowerTopLimit 14
-#define RedLowerBottomLimit 15
+#define RedLowerKey 7
+#define RedLowerElevatorEnable_A 8
+#define RedLowerElevatorEnable_B 9
+#define RedLowerMoveUp 10
+#define RedLowerMoveDown 11
+#define RedLowerTopLimit 12
+#define RedLowerBottomLimit 13
 
-#define BlueUpperKeySwitchSwitch_up 16
-#define BlueUpperKeySwitchSwitch_down 17
-#define BlueUpperElevatorEnable_A 18
-#define BlueUpperElevatorEnable_B 19
-#define BlueUpperMoveUp 20
-#define BlueUpperMoveDown 21
-#define BlueUpperTopLimit 22
-#define BlueUpperBottomLimit 23
+#define BlueUpperKey 14
+#define BlueUpperElevatorEnable_A 15
+#define BlueUpperElevatorEnable_B 16
+#define BlueUpperMoveUp 17
+#define BlueUpperMoveDown 18
+#define BlueUpperTopLimit 19
+#define BlueUpperBottomLimit 20
 
-#define BlueLowerKeySwitchSwitch_up 24
-#define BlueLowerKeySwitchSwitch_down 25
-#define BlueLowerElevatorEnable_A 26
-#define BlueLowerElevatorEnable_B 27
-#define BlueLowerMoveUp 28
-#define BlueLowerMoveDown 29
-#define BlueLowerTopLimit 30
-#define BlueLowerBottomLimit 31
+#define BlueLowerKey 21
+#define BlueLowerElevatorEnable_A 22
+#define BlueLowerElevatorEnable_B 23
+#define BlueLowerMoveUp 24
+#define BlueLowerMoveDown 25
+#define BlueLowerTopLimit 26
+#define BlueLowerBottomLimit 27
 
-#define GameModeInputStart 32
-#define GameModeInputReset 33
+#define GameModeInputStart 28
+#define GameModeInputReset 29
 
 // ***Configuration***
 #define RedAlliance 0
@@ -59,24 +55,19 @@
 
 #define DebounceMilliseconds 25
 
-Bounce RedUpperKeySwitch_up = Bounce(); 
-Bounce RedUpperKeySwitch_down = Bounce(); 
-Bounce RedLowerKeySwitch_up = Bounce(); 
-Bounce RedLowerKeySwitch_down = Bounce(); 
-Bounce BlueUpperKeySwitch_up = Bounce(); 
-Bounce BlueUpperKeySwitch_down = Bounce(); 
-Bounce BlueLowerKeySwitch_up = Bounce();
-Bounce BlueLowerKeySwitch_down = Bounce();
-
 Bounce GameModeStartSwitch = Bounce();
 Bounce GameModeResetSwitch = Bounce();
 
+// Game state 
 int currentGameMode = GameModeNone;
+bool RedUpperKeyActive = false;
+bool RedLowerKeyActive = false;
+bool BlueUpperKeyActive = false;
+bool BlueLowerKeyActive = false;
 
 
 void setup() {
-  pinMode(RedUpperKeySwitchSwitch_up, INPUT_PULLUP);
-  pinMode(RedUpperKeySwitchSwitch_down, INPUT_PULLUP);
+  pinMode(RedUpperKey, INPUT);
   pinMode(RedUpperElevatorEnable_A, OUTPUT);
   pinMode(RedUpperElevatorEnable_B, OUTPUT);
   pinMode(RedUpperMoveUp, INPUT);
@@ -84,8 +75,7 @@ void setup() {
   pinMode(RedUpperTopLimit, INPUT);
   pinMode(RedUpperBottomLimit, INPUT);  
 
-  pinMode(RedLowerKeySwitchSwitch_up, INPUT_PULLUP);
-  pinMode(RedLowerKeySwitchSwitch_down, INPUT_PULLUP);
+  pinMode(RedLowerKey, INPUT);
   pinMode(RedLowerElevatorEnable_A, OUTPUT);
   pinMode(RedLowerElevatorEnable_B, OUTPUT);
   pinMode(RedLowerMoveUp, INPUT);
@@ -93,8 +83,7 @@ void setup() {
   pinMode(RedLowerTopLimit, INPUT);
   pinMode(RedLowerBottomLimit, INPUT);  
 
-  pinMode(BlueUpperKeySwitchSwitch_up, INPUT_PULLUP);
-  pinMode(BlueUpperKeySwitchSwitch_down, INPUT_PULLUP);
+  pinMode(BlueUpperKey, INPUT);
   pinMode(BlueUpperElevatorEnable_A, OUTPUT);
   pinMode(BlueUpperElevatorEnable_B, OUTPUT);
   pinMode(BlueUpperMoveUp, INPUT);
@@ -102,8 +91,7 @@ void setup() {
   pinMode(BlueUpperTopLimit, INPUT);
   pinMode(BlueUpperBottomLimit, INPUT);  
 
-  pinMode(BlueLowerKeySwitchSwitch_up, INPUT_PULLUP);
-  pinMode(BlueLowerKeySwitchSwitch_down, INPUT_PULLUP);
+  pinMode(BlueLowerKey, INPUT);
   pinMode(BlueLowerElevatorEnable_A, OUTPUT);
   pinMode(BlueLowerElevatorEnable_B, OUTPUT);
   pinMode(BlueLowerMoveUp, INPUT);
@@ -114,30 +102,6 @@ void setup() {
   pinMode(GameModeInputStart, INPUT_PULLUP);
   pinMode(GameModeInputReset, INPUT_PULLUP);
 
-  RedUpperKeySwitch_up.attach(RedUpperKeySwitchSwitch_up);
-  RedUpperKeySwitch_up.interval(DebounceMilliseconds);
-  RedUpperKeySwitch_down.attach(RedUpperKeySwitchSwitch_down);
-  RedUpperKeySwitch_down.interval(DebounceMilliseconds);
-  
-  
-  RedLowerKeySwitch_up.attach(RedLowerKeySwitchSwitch_up);
-  RedLowerKeySwitch_up.interval(DebounceMilliseconds);  
-  RedLowerKeySwitch_down.attach(RedLowerKeySwitchSwitch_down);
-  RedLowerKeySwitch_down.interval(DebounceMilliseconds);  
-  
-  
-  BlueUpperKeySwitch_up.attach(BlueUpperKeySwitchSwitch_up);
-  BlueUpperKeySwitch_up.interval(DebounceMilliseconds);
-  BlueUpperKeySwitch_down.attach(BlueUpperKeySwitchSwitch_down);
-  BlueUpperKeySwitch_down.interval(DebounceMilliseconds);
-  
-  
-  BlueLowerKeySwitch_up.attach(BlueLowerKeySwitchSwitch_up);
-  BlueLowerKeySwitch_up.interval(DebounceMilliseconds); 
-  BlueLowerKeySwitch_down.attach(BlueLowerKeySwitchSwitch_down);
-  BlueLowerKeySwitch_down.interval(DebounceMilliseconds); 
-  
-  
   GameModeStartSwitch.attach(GameModeInputStart);
   GameModeStartSwitch.interval(DebounceMilliseconds);
   GameModeResetSwitch.attach(GameModeInputReset);
@@ -146,14 +110,6 @@ void setup() {
 
 void loop() {
   // Updates required by bounce2 libraray
-  RedUpperKeySwitch_up.update();
-  RedUpperKeySwitch_down.update();
-  RedLowerKeySwitch_up.update(); 
-  RedLowerKeySwitch_down.update(); 
-  BlueUpperKeySwitch_up.update();
-  BlueUpperKeySwitch_down.update();
-  BlueLowerKeySwitch_up.update();
-  BlueLowerKeySwitch_down.update();
   GameModeStartSwitch.update();
   GameModeResetSwitch.update();
 
@@ -192,22 +148,72 @@ void loop() {
 }
 
 void RunMatch() {
+  UpdateGameState();
   RunElevators();    
-  
   
 }
 
 
+void UpdateGameState() {
+  RedUpperKeyActive = digitalRead(RedUpperKey) == HIGH;
+  RedLowerKeyActive = digitalRead(RedLowerKey) == HIGH;
+  BlueUpperKeyActive = digitalRead(BlueUpperKey) == HIGH;
+  BlueLowerKeyActive = digitalRead(BlueLowerKey) == HIGH;  
+}
+
+
 void RunElevators() {
-  if(RedUpperKeySwitch_up.read() == LOW) { SetElevatorState(RedAlliance, UpperLevel, ElevatorMoveUp); }
-  if(RedUpperKeySwitch_down.read() == LOW) { SetElevatorState(RedAlliance, UpperLevel, ElevatorMoveDown); }
-  if(RedLowerKeySwitch_up.read() == LOW) { SetElevatorState(RedAlliance, LowerLevel, ElevatorMoveUp); }
-  if(RedLowerKeySwitch_down.read() == LOW) { SetElevatorState(RedAlliance, LowerLevel, ElevatorMoveDown); }
-    
-  if(BlueUpperKeySwitch_up.read() == LOW) { SetElevatorState(BlueAlliance, UpperLevel, ElevatorMoveUp); }
-  if(BlueUpperKeySwitch_down.read() == LOW) { SetElevatorState(BlueAlliance, UpperLevel, ElevatorMoveDown); }
-  if(BlueLowerKeySwitch_up.read() == LOW) { SetElevatorState(BlueAlliance, LowerLevel, ElevatorMoveUp); }
-  if(BlueLowerKeySwitch_down.read() == LOW) { SetElevatorState(BlueAlliance, LowerLevel, ElevatorMoveDown); }
+  // Red upper
+  if(RedUpperKeyActive && digitalRead(RedUpperMoveUp) == HIGH) { 
+    SetElevatorState(RedAlliance, UpperLevel, ElevatorMoveUp); 
+  } else {
+    SetElevatorState(RedAlliance, UpperLevel, ElevatorStop);
+  }
+ 
+  if(RedUpperKeyActive && digitalRead(RedUpperMoveDown) == HIGH) { 
+    SetElevatorState(RedAlliance, UpperLevel, ElevatorMoveDown); 
+  } else {
+    SetElevatorState(RedAlliance, UpperLevel, ElevatorStop);
+  }
+
+  // Red lower
+  if(RedLowerKeyActive && digitalRead(RedLowerMoveUp) == HIGH) { 
+    SetElevatorState(RedAlliance, LowerLevel, ElevatorMoveUp); 
+  } else {
+    SetElevatorState(RedAlliance, LowerLevel, ElevatorStop);
+  }
+ 
+  if(RedLowerKeyActive && digitalRead(RedLowerMoveDown) == HIGH) { 
+    SetElevatorState(RedAlliance, LowerLevel, ElevatorMoveDown); 
+  } else {
+    SetElevatorState(RedAlliance, LowerLevel, ElevatorStop);
+  }
+
+  // Blue upper
+  if(BlueUpperKeyActive && digitalRead(BlueUpperMoveUp) == HIGH) { 
+    SetElevatorState(BlueAlliance, UpperLevel, ElevatorMoveUp); 
+  } else {
+    SetElevatorState(BlueAlliance, UpperLevel, ElevatorStop);
+  }
+ 
+  if(BlueUpperKeyActive && digitalRead(BlueUpperMoveDown) == HIGH) { 
+    SetElevatorState(BlueAlliance, UpperLevel, ElevatorMoveDown); 
+  } else {
+    SetElevatorState(BlueAlliance, UpperLevel, ElevatorStop);
+  }
+
+  // Blue lower
+  if(BlueLowerKeyActive && digitalRead(BlueLowerMoveUp) == HIGH) { 
+    SetElevatorState(BlueAlliance, LowerLevel, ElevatorMoveUp); 
+  } else {
+    SetElevatorState(BlueAlliance, LowerLevel, ElevatorStop);
+  }
+ 
+  if(BlueLowerKeyActive && digitalRead(BlueLowerMoveDown) == HIGH) { 
+    SetElevatorState(BlueAlliance, LowerLevel, ElevatorMoveDown); 
+  } else {
+    SetElevatorState(BlueAlliance, LowerLevel, ElevatorStop);
+  }
 }
 
 
