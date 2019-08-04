@@ -49,17 +49,19 @@
 #define ElevatorStop 2
 #define TopLimit 0
 #define BottomLimit 1
-#define GameModeNone 0
+#define GameModeStop 0
 #define GameModeMatch 1
 #define GameModeReset 2
 
 #define DebounceMilliseconds 25
 
+
 Bounce GameModeStartSwitch = Bounce();
 Bounce GameModeResetSwitch = Bounce();
 
 // Game state 
-int currentGameMode = GameModeNone;
+int currentGameMode = GameModeStop;
+int lastGameMode = -1;
 bool RedUpperKeyActive = false;
 bool RedLowerKeyActive = false;
 bool BlueUpperKeyActive = false;
@@ -67,6 +69,9 @@ bool BlueLowerKeyActive = false;
 
 
 void setup() {
+  Serial.begin(9600);
+  Serial.println("Init");
+  
   pinMode(RedUpperKey, INPUT);
   pinMode(RedUpperElevatorEnable_A, OUTPUT);
   pinMode(RedUpperElevatorEnable_B, OUTPUT);
@@ -113,11 +118,11 @@ void loop() {
   GameModeStartSwitch.update();
   GameModeResetSwitch.update();
 
-  bool startSwitchActive = (GameModeStartSwitch.read() == LOW);
-  bool resetSwitchActive = (GameModeResetSwitch.read() == LOW);
+  bool startSwitchActive = GameModeStartSwitch.fell();
+  bool resetSwitchActive = GameModeResetSwitch.fell();
 
   switch(currentGameMode) {
-    case GameModeNone:
+    case GameModeStop:
       if(startSwitchActive){ 
         currentGameMode = GameModeMatch;
       } else if(resetSwitchActive) { 
@@ -130,7 +135,7 @@ void loop() {
     case GameModeMatch:
       if(resetSwitchActive) {
         StopAllElevator(); 
-        currentGameMode = GameModeNone;
+        currentGameMode = GameModeStop;
       } else {
         RunMatch();
       }
@@ -139,19 +144,21 @@ void loop() {
     case GameModeReset:
       if(resetSwitchActive) {
         StopAllElevator(); 
-        currentGameMode = GameModeNone;
+        currentGameMode = GameModeStop;
       } else {
         ResetMatch();
       }      
       break;
   }
+
+  UpdateGameDisplay();
 }
 
 void RunMatch() {
   UpdateGameState();
-  UpdateGameDisplay();
 
-  RunElevators();    
+
+  //RunElevators();    
 
 
 }
@@ -233,7 +240,7 @@ void HomeAllElevator(int WhichLimit) {
   bool blueLowerDone = HomeElevator(BlueAlliance, LowerLevel, WhichLimit);
 
   if(redUpperDone && redLowerdone && blueUpperDone && blueLowerDone) {
-    currentGameMode = GameModeNone;
+    currentGameMode = GameModeStop;
   }
 }
 
@@ -344,10 +351,30 @@ void StopAllElevator() {
 
 
 void UpdateGameDisplay() {
-  // Send values of the game state variables to the screen
+  if(lastGameMode != currentGameMode) {
+    lastGameMode = currentGameMode;
+    Serial.println(GetGameModeDescription());
+  }
+  
   //currentGameMode;
   //RedUpperKeyActive;
   //RedLowerKeyActive;
   //BlueUpperKeyActive;
   //BlueLowerKeyActive;
+}
+
+String GetGameModeDescription() {
+  switch(currentGameMode){
+    case GameModeStop:
+      return F("Stop");
+      break;
+
+    case GameModeMatch:
+      return F("Match");
+      break;
+
+    case GameModeReset:
+      return F("Reset");
+      break;
+  }
 }
