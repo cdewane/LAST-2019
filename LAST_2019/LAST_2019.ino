@@ -109,7 +109,7 @@ void setup() {
 }
 
 void loop() {
-  // Updates required by bounce2 libraray
+  // Updates required by bounce2 library
   GameModeStartSwitch.update();
   GameModeResetSwitch.update();
 
@@ -149,8 +149,11 @@ void loop() {
 
 void RunMatch() {
   UpdateGameState();
+  UpdateGameDisplay();
+
   RunElevators();    
-  
+
+
 }
 
 
@@ -337,4 +340,14 @@ void StopAllElevator() {
   SetElevatorState(RedAlliance, LowerLevel, ElevatorStop);
   SetElevatorState(BlueAlliance, UpperLevel, ElevatorStop);
   SetElevatorState(BlueAlliance, LowerLevel, ElevatorStop);
+}
+
+
+void UpdateGameDisplay() {
+  // Send values of the game state variables to the screen
+  //currentGameMode;
+  //RedUpperKeyActive;
+  //RedLowerKeyActive;
+  //BlueUpperKeyActive;
+  //BlueLowerKeyActive;
 }
