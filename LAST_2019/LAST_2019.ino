@@ -67,7 +67,9 @@ bool RedLowerKeyActive = false;
 bool BlueUpperKeyActive = false;
 bool BlueLowerKeyActive = false;
 
-
+static String pinText = "Pin: ";
+static String valueText = "Value: "; 
+  
 void setup() {
   Serial.begin(9600);
   Serial.println("Init");
@@ -158,9 +160,8 @@ void RunMatch() {
   UpdateGameState();
 
 
-  //RunElevators();    
 
-
+  RunElevators();    
 }
 
 
@@ -170,6 +171,7 @@ void UpdateGameState() {
   BlueUpperKeyActive = digitalRead(BlueUpperKey) == HIGH;
   BlueLowerKeyActive = digitalRead(BlueLowerKey) == HIGH;  
 }
+
 
 
 void RunElevators() {
@@ -324,19 +326,19 @@ void SetElevatorState(int alliance, int level, int dir) {
 
   switch(dir) {
     case ElevatorMoveUp:
-      EnableVal_A = true;
-      EnableVal_B = false;
+      EnableVal_A = HIGH;
+      EnableVal_B = LOW;
       break;
     case ElevatorMoveDown:
-      EnableVal_A = false;
-      EnableVal_B = true;
+      EnableVal_A = LOW;
+      EnableVal_B = HIGH;
       break;
     case ElevatorStop:
-      EnableVal_A = false;
-      EnableVal_B = false;
+      EnableVal_A = LOW;
+      EnableVal_B = LOW;
       break;
   }
-
+  
   digitalWrite(EnablePin_A, EnableVal_A);
   digitalWrite(EnablePin_B, EnableVal_B);
 }
