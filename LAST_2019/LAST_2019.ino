@@ -37,7 +37,7 @@
 #define BlueLowerBottomLimit 31
 
 #define GameModeInputStart 32
-#define GameModeInputReset 33
+#define GameModeInputReset 33  
 
 // ***Configuration***
 #define RedAlliance 0
@@ -71,40 +71,40 @@ bool BlueLowerKeyActive = false;
 //static String valueText = "Value: "; 
   
 void setup() {
-  //Serial.begin(9600);
-  //Serial.println("Init");
+  Serial.begin(9600);
+  Serial.println("Init");
   
-  pinMode(RedUpperKey, INPUT);
+  pinMode(RedUpperKey, INPUT_PULLUP);
   pinMode(RedUpperElevatorEnable_A, OUTPUT);
   pinMode(RedUpperElevatorEnable_B, OUTPUT);
-  pinMode(RedUpperMoveUp, INPUT);
-  pinMode(RedUpperMoveDown, INPUT);
-  pinMode(RedUpperTopLimit, INPUT);
-  pinMode(RedUpperBottomLimit, INPUT);  
+  pinMode(RedUpperMoveUp, INPUT_PULLUP);
+  pinMode(RedUpperMoveDown, INPUT_PULLUP);
+  pinMode(RedUpperTopLimit, INPUT_PULLUP);
+  pinMode(RedUpperBottomLimit, INPUT_PULLUP);  
 
-  pinMode(RedLowerKey, INPUT);
+  pinMode(RedLowerKey, INPUT_PULLUP);
   pinMode(RedLowerElevatorEnable_A, OUTPUT);
   pinMode(RedLowerElevatorEnable_B, OUTPUT);
-  pinMode(RedLowerMoveUp, INPUT);
-  pinMode(RedLowerMoveDown, INPUT);
-  pinMode(RedLowerTopLimit, INPUT);
-  pinMode(RedLowerBottomLimit, INPUT);  
+  pinMode(RedLowerMoveUp, INPUT_PULLUP);
+  pinMode(RedLowerMoveDown, INPUT_PULLUP);
+  pinMode(RedLowerTopLimit, INPUT_PULLUP);
+  pinMode(RedLowerBottomLimit, INPUT_PULLUP);  
 
-  pinMode(BlueUpperKey, INPUT);
+  pinMode(BlueUpperKey, INPUT_PULLUP);
   pinMode(BlueUpperElevatorEnable_A, OUTPUT);
   pinMode(BlueUpperElevatorEnable_B, OUTPUT);
-  pinMode(BlueUpperMoveUp, INPUT);
-  pinMode(BlueUpperMoveDown, INPUT);
-  pinMode(BlueUpperTopLimit, INPUT);
-  pinMode(BlueUpperBottomLimit, INPUT);  
+  pinMode(BlueUpperMoveUp, INPUT_PULLUP);
+  pinMode(BlueUpperMoveDown, INPUT_PULLUP);
+  pinMode(BlueUpperTopLimit, INPUT_PULLUP);
+  pinMode(BlueUpperBottomLimit, INPUT_PULLUP);  
 
-  pinMode(BlueLowerKey, INPUT);
+  pinMode(BlueLowerKey, INPUT_PULLUP);
   pinMode(BlueLowerElevatorEnable_A, OUTPUT);
   pinMode(BlueLowerElevatorEnable_B, OUTPUT);
-  pinMode(BlueLowerMoveUp, INPUT);
-  pinMode(BlueLowerMoveDown, INPUT);
-  pinMode(BlueLowerTopLimit, INPUT);
-  pinMode(BlueLowerBottomLimit, INPUT);
+  pinMode(BlueLowerMoveUp, INPUT_PULLUP);
+  pinMode(BlueLowerMoveDown, INPUT_PULLUP);
+  pinMode(BlueLowerTopLimit, INPUT_PULLUP);
+  pinMode(BlueLowerBottomLimit, INPUT_PULLUP);
 
   pinMode(GameModeInputStart, INPUT_PULLUP);
   pinMode(GameModeInputReset, INPUT_PULLUP);
@@ -166,62 +166,62 @@ void RunMatch() {
 
 
 void UpdateGameState() {
-  RedUpperKeyActive = digitalRead(RedUpperKey) == HIGH;
-  RedLowerKeyActive = digitalRead(RedLowerKey) == HIGH;
-  BlueUpperKeyActive = digitalRead(BlueUpperKey) == HIGH;
-  BlueLowerKeyActive = digitalRead(BlueLowerKey) == HIGH;  
+  RedUpperKeyActive = digitalRead(RedUpperKey) == LOW; 
+  RedLowerKeyActive = digitalRead(RedLowerKey) == LOW;
+  BlueUpperKeyActive = digitalRead(BlueUpperKey) == LOW;
+  BlueLowerKeyActive = digitalRead(BlueLowerKey) == LOW;  
 }
 
 
 
 void RunElevators() {
   // Red upper
-  if(RedUpperKeyActive && digitalRead(RedUpperMoveUp) == HIGH) { 
+  if(RedUpperKeyActive && digitalRead(RedUpperMoveUp) == LOW) { 
     SetElevatorState(RedAlliance, UpperLevel, ElevatorMoveUp); 
   } else {
     SetElevatorState(RedAlliance, UpperLevel, ElevatorStop);
   }
  
-  if(RedUpperKeyActive && digitalRead(RedUpperMoveDown) == HIGH) { 
+  if(RedUpperKeyActive && digitalRead(RedUpperMoveDown) == LOW) { 
     SetElevatorState(RedAlliance, UpperLevel, ElevatorMoveDown); 
   } else {
     SetElevatorState(RedAlliance, UpperLevel, ElevatorStop);
   }
 
   // Red lower
-  if(RedLowerKeyActive && digitalRead(RedLowerMoveUp) == HIGH) { 
+  if(RedLowerKeyActive && digitalRead(RedLowerMoveUp) == LOW) { 
     SetElevatorState(RedAlliance, LowerLevel, ElevatorMoveUp); 
   } else {
     SetElevatorState(RedAlliance, LowerLevel, ElevatorStop);
   }
  
-  if(RedLowerKeyActive && digitalRead(RedLowerMoveDown) == HIGH) { 
+  if(RedLowerKeyActive && digitalRead(RedLowerMoveDown) == LOW) { 
     SetElevatorState(RedAlliance, LowerLevel, ElevatorMoveDown); 
   } else {
     SetElevatorState(RedAlliance, LowerLevel, ElevatorStop);
   }
 
   // Blue upper
-  if(BlueUpperKeyActive && digitalRead(BlueUpperMoveUp) == HIGH) { 
+  if(BlueUpperKeyActive && digitalRead(BlueUpperMoveUp) == LOW) { 
     SetElevatorState(BlueAlliance, UpperLevel, ElevatorMoveUp); 
   } else {
     SetElevatorState(BlueAlliance, UpperLevel, ElevatorStop);
   }
  
-  if(BlueUpperKeyActive && digitalRead(BlueUpperMoveDown) == HIGH) { 
+  if(BlueUpperKeyActive && digitalRead(BlueUpperMoveDown) == LOW) { 
     SetElevatorState(BlueAlliance, UpperLevel, ElevatorMoveDown); 
   } else {
     SetElevatorState(BlueAlliance, UpperLevel, ElevatorStop);
   }
 
   // Blue lower
-  if(BlueLowerKeyActive && digitalRead(BlueLowerMoveUp) == HIGH) { 
+  if(BlueLowerKeyActive && digitalRead(BlueLowerMoveUp) == LOW) { 
     SetElevatorState(BlueAlliance, LowerLevel, ElevatorMoveUp); 
   } else {
     SetElevatorState(BlueAlliance, LowerLevel, ElevatorStop);
   }
  
-  if(BlueLowerKeyActive && digitalRead(BlueLowerMoveDown) == HIGH) { 
+  if(BlueLowerKeyActive && digitalRead(BlueLowerMoveDown) == LOW) { 
     SetElevatorState(BlueAlliance, LowerLevel, ElevatorMoveDown); 
   } else {
     SetElevatorState(BlueAlliance, LowerLevel, ElevatorStop);
@@ -353,11 +353,17 @@ void StopAllElevator() {
 
 
 void UpdateGameDisplay() {
+  //Serial.print("?f");
+  //Serial.println(GetGameModeDescription());
+  //delay(50);
+  
   if(lastGameMode != currentGameMode) {
     lastGameMode = currentGameMode;
-    //Serial.println(GetGameModeDescription());
+    
+    Serial.print("?f");
+    Serial.println(GetGameModeDescription());
   }
-  
+  //Serial.println(RedUpperKeyActive);
   //currentGameMode;
   //RedUpperKeyActive;
   //RedLowerKeyActive;
