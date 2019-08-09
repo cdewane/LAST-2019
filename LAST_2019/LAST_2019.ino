@@ -4,40 +4,40 @@
 #include <Bounce2.h>
 
 // ***DIO Pins***
-#define RedUpperKey 0
-#define RedUpperElevatorEnable_A 1
-#define RedUpperElevatorEnable_B 2
-#define RedUpperMoveUp 3
-#define RedUpperMoveDown 4
-#define RedUpperTopLimit 5
-#define RedUpperBottomLimit 6
+#define RedUpperKey 2
+#define RedUpperElevatorEnable_A 3
+#define RedUpperElevatorEnable_B 4
+#define RedUpperMoveUp 5
+#define RedUpperMoveDown 6
+#define RedUpperTopLimit 7
+#define RedUpperBottomLimit 8
 
-#define RedLowerKey 7
-#define RedLowerElevatorEnable_A 8
-#define RedLowerElevatorEnable_B 9
-#define RedLowerMoveUp 10
-#define RedLowerMoveDown 11
-#define RedLowerTopLimit 12
-#define RedLowerBottomLimit 13
+#define RedLowerKey 9
+#define RedLowerElevatorEnable_A 10
+#define RedLowerElevatorEnable_B 11
+#define RedLowerMoveUp 12
+#define RedLowerMoveDown 13
+#define RedLowerTopLimit 14
+#define RedLowerBottomLimit 15
 
-#define BlueUpperKey 14
-#define BlueUpperElevatorEnable_A 15
-#define BlueUpperElevatorEnable_B 16
-#define BlueUpperMoveUp 17
-#define BlueUpperMoveDown 18
-#define BlueUpperTopLimit 19
-#define BlueUpperBottomLimit 20
+#define BlueUpperKey 16
+#define BlueUpperElevatorEnable_A 17
+#define BlueUpperElevatorEnable_B 18
+#define BlueUpperMoveUp 19
+#define BlueUpperMoveDown 22
+#define BlueUpperTopLimit 23
+#define BlueUpperBottomLimit 24
 
-#define BlueLowerKey 21
-#define BlueLowerElevatorEnable_A 22
-#define BlueLowerElevatorEnable_B 23
-#define BlueLowerMoveUp 24
-#define BlueLowerMoveDown 25
-#define BlueLowerTopLimit 26
-#define BlueLowerBottomLimit 27
+#define BlueLowerKey 25
+#define BlueLowerElevatorEnable_A 26
+#define BlueLowerElevatorEnable_B 27
+#define BlueLowerMoveUp 28
+#define BlueLowerMoveDown 29
+#define BlueLowerTopLimit 30
+#define BlueLowerBottomLimit 31
 
-#define GameModeInputStart 28
-#define GameModeInputReset 29
+#define GameModeInputStart 32
+#define GameModeInputReset 33
 
 // ***Configuration***
 #define RedAlliance 0
@@ -67,12 +67,12 @@ bool RedLowerKeyActive = false;
 bool BlueUpperKeyActive = false;
 bool BlueLowerKeyActive = false;
 
-static String pinText = "Pin: ";
-static String valueText = "Value: "; 
+//static String pinText = "Pin: ";
+//static String valueText = "Value: "; 
   
 void setup() {
-  Serial.begin(9600);
-  Serial.println("Init");
+  //Serial.begin(9600);
+  //Serial.println("Init");
   
   pinMode(RedUpperKey, INPUT);
   pinMode(RedUpperElevatorEnable_A, OUTPUT);
@@ -355,7 +355,7 @@ void StopAllElevator() {
 void UpdateGameDisplay() {
   if(lastGameMode != currentGameMode) {
     lastGameMode = currentGameMode;
-    Serial.println(GetGameModeDescription());
+    //Serial.println(GetGameModeDescription());
   }
   
   //currentGameMode;
