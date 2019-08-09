@@ -178,50 +178,36 @@ void RunElevators() {
   // Red upper
   if(RedUpperKeyActive && digitalRead(RedUpperMoveUp) == LOW) { 
     SetElevatorState(RedAlliance, UpperLevel, ElevatorMoveUp); 
-  } else {
-    SetElevatorState(RedAlliance, UpperLevel, ElevatorStop);
-  }
- 
-  if(RedUpperKeyActive && digitalRead(RedUpperMoveDown) == LOW) { 
+  } else if(RedUpperKeyActive && digitalRead(RedUpperMoveDown) == LOW) { 
     SetElevatorState(RedAlliance, UpperLevel, ElevatorMoveDown); 
-  } else {
+  }else {
     SetElevatorState(RedAlliance, UpperLevel, ElevatorStop);
   }
 
   // Red lower
   if(RedLowerKeyActive && digitalRead(RedLowerMoveUp) == LOW) { 
     SetElevatorState(RedAlliance, LowerLevel, ElevatorMoveUp); 
-  } else {
-    SetElevatorState(RedAlliance, LowerLevel, ElevatorStop);
-  }
- 
-  if(RedLowerKeyActive && digitalRead(RedLowerMoveDown) == LOW) { 
+  } else if(RedLowerKeyActive && digitalRead(RedLowerMoveDown) == LOW) { 
     SetElevatorState(RedAlliance, LowerLevel, ElevatorMoveDown); 
-  } else {
+  }else {
     SetElevatorState(RedAlliance, LowerLevel, ElevatorStop);
   }
+
 
   // Blue upper
   if(BlueUpperKeyActive && digitalRead(BlueUpperMoveUp) == LOW) { 
     SetElevatorState(BlueAlliance, UpperLevel, ElevatorMoveUp); 
-  } else {
+  } else if(BlueUpperKeyActive && digitalRead(BlueUpperMoveDown) == LOW) { 
+    SetElevatorState(BlueAlliance, UpperLevel, ElevatorMoveDown); 
+  }else {
     SetElevatorState(BlueAlliance, UpperLevel, ElevatorStop);
   }
  
-  if(BlueUpperKeyActive && digitalRead(BlueUpperMoveDown) == LOW) { 
-    SetElevatorState(BlueAlliance, UpperLevel, ElevatorMoveDown); 
-  } else {
-    SetElevatorState(BlueAlliance, UpperLevel, ElevatorStop);
-  }
 
   // Blue lower
   if(BlueLowerKeyActive && digitalRead(BlueLowerMoveUp) == LOW) { 
     SetElevatorState(BlueAlliance, LowerLevel, ElevatorMoveUp); 
-  } else {
-    SetElevatorState(BlueAlliance, LowerLevel, ElevatorStop);
-  }
- 
-  if(BlueLowerKeyActive && digitalRead(BlueLowerMoveDown) == LOW) { 
+  } else if(BlueLowerKeyActive && digitalRead(BlueLowerMoveDown) == LOW) { 
     SetElevatorState(BlueAlliance, LowerLevel, ElevatorMoveDown); 
   } else {
     SetElevatorState(BlueAlliance, LowerLevel, ElevatorStop);
