@@ -8,7 +8,7 @@
 #define RedUpperElevatorEnable_A 3
 #define RedUpperElevatorEnable_B 4
 #define RedUpperMoveUp 5
-#define RedUpperMoveDown 6
+#define RedUpperMoveDown 6  
 #define RedUpperTopLimit 7
 #define RedUpperBottomLimit 8
 
@@ -21,8 +21,8 @@
 #define RedLowerBottomLimit 15
 
 #define BlueUpperKey 16
-#define BlueUpperElevatorEnable_A 17
-#define BlueUpperElevatorEnable_B 18
+#define BlueUpperElevatorEnable_A 17  
+#define BlueUpperElevatorEnable_B 47  // *******************************
 #define BlueUpperMoveUp 19
 #define BlueUpperMoveDown 22
 #define BlueUpperTopLimit 23
@@ -67,12 +67,10 @@ bool RedLowerKeyActive = false;
 bool BlueUpperKeyActive = false;
 bool BlueLowerKeyActive = false;
 
-//static String pinText = "Pin: ";
-//static String valueText = "Value: "; 
   
 void setup() {
-  Serial.begin(9600);
-  Serial.println("Init");
+  Serial1.begin(9600);
+  Serial1.println("Init");
   
   pinMode(RedUpperKey, INPUT_PULLUP);
   pinMode(RedUpperElevatorEnable_A, OUTPUT);
@@ -91,8 +89,8 @@ void setup() {
   pinMode(RedLowerBottomLimit, INPUT_PULLUP);  
 
   pinMode(BlueUpperKey, INPUT_PULLUP);
-  pinMode(BlueUpperElevatorEnable_A, OUTPUT);
-  pinMode(BlueUpperElevatorEnable_B, OUTPUT);
+  pinMode(BlueUpperElevatorEnable_A, OUTPUT);  
+  pinMode(BlueUpperElevatorEnable_B, OUTPUT);  //******************************
   pinMode(BlueUpperMoveUp, INPUT_PULLUP);
   pinMode(BlueUpperMoveDown, INPUT_PULLUP);
   pinMode(BlueUpperTopLimit, INPUT_PULLUP);
@@ -346,8 +344,8 @@ void UpdateGameDisplay() {
   if(lastGameMode != currentGameMode) {
     lastGameMode = currentGameMode;
     
-    Serial.print("?f");
-    Serial.println(GetGameModeDescription());
+    Serial1.print("?f");
+    Serial1.println(GetGameModeDescription());
   }
   //Serial.println(RedUpperKeyActive);
   //currentGameMode;
