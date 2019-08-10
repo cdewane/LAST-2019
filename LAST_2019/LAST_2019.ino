@@ -20,11 +20,11 @@
 #define RedLowerTopLimit 14
 #define RedLowerBottomLimit 15
 
-#define BlueUpperKey 16
-#define BlueUpperElevatorEnable_A 17  
-#define BlueUpperElevatorEnable_B 47  // *******************************
-#define BlueUpperMoveUp 19
-#define BlueUpperMoveDown 22
+#define BlueUpperKey 47  
+#define BlueUpperElevatorEnable_A 48
+#define BlueUpperElevatorEnable_B 49  
+#define BlueUpperMoveUp 50
+#define BlueUpperMoveDown 51
 #define BlueUpperTopLimit 23
 #define BlueUpperBottomLimit 24
 
@@ -38,6 +38,37 @@
 
 #define GameModeInputStart 32
 #define GameModeInputReset 33  
+
+// ***Ian's Magnificent Light Pins***
+int RedL1Button = 34;
+int RedL1Lights = 35;
+int BlueL1Button = 36;
+int BlueL1Lights = 37;
+
+int RedCoOpButton = 38;
+int BlueCoOpButton = 39;
+int L2CoOpLights = 40;
+
+int RedPot_Analog = 0;
+int RedL3LowLights = 41;
+int BluePot_Analog = 1;
+int BlueL3LowLights = 42;
+
+int RedRetrievalButton = 43;
+int RedL3HiLights = 44;
+int BlueRetrievalButton = 45;
+int BlueL3HiLights = 46;
+
+bool RedL1Enabled = false;
+bool BlueL1Enabled = false;
+
+bool L2CoOpEnabled = false;
+
+bool RedLowL3Enabled = false;
+bool BlueLowL3Enabled = false;
+
+bool RedHiL3Enabled = false;
+bool BlueHiL3Enabled = false;
 
 // ***Configuration***
 #define RedAlliance 0
@@ -54,7 +85,6 @@
 #define GameModeReset 2
 
 #define DebounceMilliseconds 25
-
 
 Bounce GameModeStartSwitch = Bounce();
 Bounce GameModeResetSwitch = Bounce();
@@ -107,6 +137,29 @@ void setup() {
   pinMode(GameModeInputStart, INPUT_PULLUP);
   pinMode(GameModeInputReset, INPUT_PULLUP);
 
+  //***Ian's Fantabulous Init Sequence
+  pinMode(RedL1Button, INPUT);
+  pinMode(RedL1Lights, OUTPUT);
+  pinMode(BlueL1Button, INPUT);
+  pinMode(BlueL1Lights, OUTPUT);
+  pinMode(RedCoOpButton, INPUT);
+  pinMode(BlueCoOpButton, INPUT);
+  pinMode(L2CoOpLights, OUTPUT);
+  pinMode(RedL3LowLights, OUTPUT);
+  pinMode(BlueL3LowLights, OUTPUT);
+  pinMode(RedRetrievalButton, INPUT);
+  pinMode(RedL3HiLights, OUTPUT);
+  pinMode(BlueRetrievalButton, INPUT);
+  pinMode(BlueL3HiLights, OUTPUT);
+
+  digitalWrite(RedL1Lights, LOW);
+  digitalWrite(BlueL1Lights, LOW);
+  digitalWrite(L2CoOpLights, LOW);
+  digitalWrite(RedL3LowLights, LOW);
+  digitalWrite(BlueL3LowLights, LOW);
+  digitalWrite(RedL3HiLights, LOW);
+  digitalWrite(BlueL3HiLights, LOW);
+
   GameModeStartSwitch.attach(GameModeInputStart);
   GameModeStartSwitch.interval(DebounceMilliseconds);
   GameModeResetSwitch.attach(GameModeInputReset);
@@ -157,7 +210,7 @@ void loop() {
 void RunMatch() {
   UpdateGameState();
 
-
+  ScoreLights();
 
   RunElevators();    
 }
@@ -215,6 +268,7 @@ void RunElevators() {
 
 void ResetMatch() {
   HomeAllElevator(TopLimit);
+  ResetLights();
 }
 
 
@@ -345,7 +399,7 @@ void UpdateGameDisplay() {
     lastGameMode = currentGameMode;
     
     Serial1.print("?f");
-    Serial1.println(GetGameModeDescription());
+     Serial1.println(GetGameModeDescription());
   }
   //Serial.println(RedUpperKeyActive);
   //currentGameMode;
@@ -369,4 +423,63 @@ String GetGameModeDescription() {
       return F("Reset");
       break;
   }
+}
+
+void ScoreLights() {
+  //L1 Button Code for Both Teams
+  if(digitalRead(RedL1Button) == HIGH) {
+    RedL1Enabled = true;
+    digitalWrite(RedL1Lights, HIGH);
+  }
+  
+  if(digitalRead(BlueL1Button) == HIGH) {
+    BlueL1Enabled = true;
+    digitalWrite(BlueL1Lights, HIGH);
+  }
+
+  //CoOp Button Code for Both Teams
+  if(digitalRead(RedCoOpButton) == HIGH && digitalRead(BlueCoOpButton) == HIGH) {
+    L2CoOpEnabled = true;
+    digitalWrite(L2CoOpLights, HIGH);
+  }
+  
+  //Potentiometer Code for Both Teams
+  if (analogRead(RedPot_Analog) > 900) {
+    RedLowL3Enabled = true;
+    digitalWrite(RedL3LowLights, HIGH);
+  }
+
+  if (analogRead(BluePot_Analog) > 900) {
+    BlueLowL3Enabled = true;
+    digitalWrite(BlueL3LowLights, HIGH);
+  }
+
+  //Retrieval Code for Both Teams
+  if(digitalRead(RedRetrievalButton) == HIGH) {
+    RedHiL3Enabled = true;
+    digitalWrite(RedL3HiLights, HIGH);
+  }
+  
+  if(digitalRead(BlueRetrievalButton) == HIGH) {
+    BlueHiL3Enabled = true;
+    digitalWrite(BlueL3HiLights, HIGH);
+  }
+}
+
+void ResetLights() {
+  RedL1Enabled = false;
+  BlueL1Enabled = false;
+  L2CoOpEnabled = false;
+  RedLowL3Enabled = false;
+  BlueLowL3Enabled = false;
+  RedHiL3Enabled = false;
+  BlueHiL3Enabled = false;
+
+  digitalWrite(RedL1Lights, LOW);
+  digitalWrite(BlueL1Lights, LOW);
+  digitalWrite(L2CoOpLights, LOW);
+  digitalWrite(RedL3LowLights, LOW);
+  digitalWrite(BlueL3LowLights, LOW);
+  digitalWrite(RedL3HiLights, LOW);
+  digitalWrite(BlueL3HiLights, LOW);
 }
